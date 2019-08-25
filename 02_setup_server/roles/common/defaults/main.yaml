@@ -13,6 +13,7 @@ packages:
   - sysstat
   - perf
   - htop
+  - unzip
   - http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el7/en/x86_64/rpmforge/RPMS/mtop-0.6.6-1.2.el7.rf.noarch.rpm
   - https://www.percona.com/redir/downloads/percona-release/redhat/latest/percona-release-0.1-6.noarch.rpm
   - percona-toolkit
