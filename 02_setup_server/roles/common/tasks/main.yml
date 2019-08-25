@@ -1,0 +1,8 @@
+---
+- name: INSTALL EPEL-RELEASE
+  yum:
+    name: epel-release
+
+- name: INSTALL OTHER PACKAGES
+  yum:
+    name: "{{ packages }}"

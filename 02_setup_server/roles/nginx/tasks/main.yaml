@@ -1,0 +1,9 @@
+---
+#
+# roles/nginx/tasks/main.yml
+#
+
+- name: INSTALL NGINX
+  yum:
+    name: nginx
+...

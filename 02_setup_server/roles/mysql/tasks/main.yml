@@ -1,0 +1,59 @@
+---
+#
+# roles/mysql/tasks/main.yml
+#
+- name: INSTALL PERCONA-TOOLKIT
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - https://www.percona.com/redir/downloads/percona-release/redhat/latest/percona-release-0.1-6.noarch.rpm
+      - percona-toolkit
+
+- name: EXECUTE MKDIR TO INSTALL MYSQLTUNER
+  become: yes
+  become_user: isucon
+  file:
+    path: ~/.mysqltuner
+    state: directory
+    mode: '0755'
+
+- name: GET MYSQLTUNER
+  become: yes
+  become_user: isucon
+  get_url:
+    url: http://mysqltuner.pl/
+    dest: ~/.mysqltuner/mysqltuner.pl
+    mode: '0755'
+
+- name: GET BASIC_PASSWORDS.TXT
+  become: yes
+  become_user: isucon
+  get_url:
+    url: https://raw.githubusercontent.com/major/MySQLTuner-perl/master/basic_passwords.txt
+    dest: ~/.mysqltuner/basic_passwords.txt
+    mode: '0755'
+
+- name: GET VULNERABILITIES.CSV
+  become: yes
+  become_user: isucon
+  get_url:
+    url: https://raw.githubusercontent.com/major/MySQLTuner-perl/master/vulnerabilities.csv
+    dest: ~/.mysqltuner/vulnerabilities.csv
+    mode: '0755'
+
+- name: CREATE SYMBOLIC LINK TO MYSQLTUNER
+  file:
+    src: /home/isucon/.mysqltuner/mysqltuner.pl
+    dest: /usr/local/bin/mysqltuner
+    owner: root
+    group: root
+    state: link
+    mode: '0755'
+
+- name: TUNE MYSQL
+  shell: echo -e "innodb_stats_on_metadata = 0\ninnodb_buffer_pool_size=1GB\ninnodb_flush_log_at_trx_commit=2\ninnodb_flush_method=O_DIRECT" >> /etc/my.cnf
+
+- name: RESTART MYSQL
+  command: systemctl restart mariadb
+
