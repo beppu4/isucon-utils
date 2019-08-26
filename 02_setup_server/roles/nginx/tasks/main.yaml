@@ -4,26 +4,21 @@
 #
 
 - name: INSTALL NGINX
+  sudo: yes
   yum:
     name: nginx
 
 - name: DOWNLOAD KATARIBE
-  become: yes
-  become_user: isucon
   get_url:
     url: https://github.com/matsuu/kataribe/releases/download/v0.3.3/linux_386.zip
     dest: /tmp
 
 - name: MAKE DIRECTORY
-  become: yes
-  become_user: isucon
   file:
     dest: ~/.kataribe
     state: directory
 
 - name: UNARCHIVE KATARIBE
-  become: yes
-  become_user: isucon
   unarchive:
     src: /tmp/linux_386.zip
     dest: ~/.kataribe
@@ -36,6 +31,7 @@
     mode: '0755'
 
 - name: ADD LOG FORMAT
+  sudo: yes
   blockinfile:
     dest: /etc/nginx/nginx.conf
     insertafter: 'http {'
@@ -45,9 +41,16 @@
                            '"$http_referer" "$http_user_agent" $request_time';
 
 - name: MODIFY LOG FORMAT
+  sudo: yes
   lineinfile:
     dest: /etc/nginx/nginx.conf
     regexp: '^.*access_log.*$'
     line: access_log /var/log/nginx/access.log with_time;
+
+- name: RESTART NGINX
+  sudo: yes
+  systemd:
+    state: started
+    name: nginx
 
 ...

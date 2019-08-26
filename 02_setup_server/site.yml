@@ -4,9 +4,16 @@
 #
 
 - hosts: all
-  sudo: yes
+  remote_user: isucon
   roles:
-    - common
-    - nginx
-    - mysql
+    - role: common
+      tags:
+        - common
+    - role: nginx
+      tags:
+        - nginx
+    - role: mysql
+      tags:
+        - mysql
 
+...

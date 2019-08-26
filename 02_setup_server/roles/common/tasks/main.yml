@@ -1,8 +1,29 @@
 ---
+#
+# roles/common/tasks/main.yml
+#
+
 - name: INSTALL EPEL-RELEASE
+  sudo: yes
   yum:
     name: epel-release
 
 - name: INSTALL OTHER PACKAGES
+  sudo: yes
   yum:
     name: "{{ packages }}"
+  vars:
+    packages:
+      - vim
+      - wget
+      - net-tools
+      - git
+      - redis
+      - dstat
+      - sysstat
+      - perf
+      - htop
+      - unzip
+      - http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el7/en/x86_64/rpmforge/RPMS/mtop-0.6.6-1.2.el7.rf.noarch.rpm
+
+...
